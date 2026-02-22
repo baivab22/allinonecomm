@@ -39,68 +39,68 @@
 }
 
 :root {
-  /* Amazon-inspired but modernized: Deep Indigo & Amber */
-  --background: 210 20% 98%;
-  --foreground: 224 71% 4%;
+  /* Sophisticated Professional Palette: Slate & Emerald */
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
   
   --card: 0 0% 100%;
-  --card-foreground: 224 71% 4%;
+  --card-foreground: 222 47% 11%;
   
   --popover: 0 0% 100%;
-  --popover-foreground: 224 71% 4%;
+  --popover-foreground: 222 47% 11%;
   
-  /* Primary Indigo */
-  --primary: 224 64% 33%;
-  --primary-foreground: 210 20% 98%;
+  /* Primary Slate */
+  --primary: 222 47% 11%;
+  --primary-foreground: 210 40% 98%;
   
-  /* Amber Accent (Amazon Gold) */
-  --secondary: 38 92% 50%;
-  --secondary-foreground: 224 71% 4%;
+  /* Emerald Accent */
+  --secondary: 160 84% 39%;
+  --secondary-foreground: 210 40% 98%;
   
-  --muted: 220 14% 94%;
-  --muted-foreground: 220 9% 46%;
+  --muted: 214 32% 91%;
+  --muted-foreground: 215 16% 47%;
   
-  --accent: 38 92% 50%;
-  --accent-foreground: 224 71% 4%;
+  --accent: 160 84% 39%;
+  --accent-foreground: 210 40% 98%;
   
   --destructive: 0 84% 60%;
-  --destructive-foreground: 210 20% 98%;
+  --destructive-foreground: 210 40% 98%;
 
-  --border: 220 13% 91%;
-  --input: 220 13% 91%;
-  --ring: 224 64% 33%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 222 47% 11%;
 
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: 224 71% 4%;
-  --foreground: 210 20% 98%;
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
   
-  --card: 224 71% 4%;
-  --card-foreground: 210 20% 98%;
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
   
-  --popover: 224 71% 4%;
-  --popover-foreground: 210 20% 98%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
   
-  --primary: 210 20% 98%;
-  --primary-foreground: 224 64% 33%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222 47% 11%;
   
-  --secondary: 38 92% 50%;
-  --secondary-foreground: 224 71% 4%;
+  --secondary: 160 84% 39%;
+  --secondary-foreground: 210 40% 98%;
   
-  --muted: 224 71% 12%;
+  --muted: 217 33% 17%;
   --muted-foreground: 215 20% 65%;
   
-  --accent: 38 92% 50%;
-  --accent-foreground: 224 71% 4%;
+  --accent: 160 84% 39%;
+  --accent-foreground: 210 40% 98%;
   
   --destructive: 0 62% 30%;
-  --destructive-foreground: 210 20% 98%;
+  --destructive-foreground: 210 40% 98%;
 
-  --border: 224 71% 12%;
-  --input: 224 71% 12%;
-  --ring: 210 20% 98%;
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --ring: 210 40% 98%;
 }
 
 @layer base {
@@ -113,20 +113,4 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
   }
-}
-
-.hover-lift {
-  @apply transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-lg;
-}
-
-.image-zoom {
-  @apply transition-transform duration-700 ease-out hover:scale-105;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }

@@ -90,9 +90,9 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { icon: <Zap className="text-secondary" />, title: "Lightning Fast", desc: "Same day delivery" },
-              { icon: <ShieldCheck className="text-primary" />, title: "Secure Checkout", desc: "100% protected" },
-              { icon: <TrendingUp className="text-green-500" />, title: "Trending", desc: "Most popular now" },
-              { icon: <Percent className="text-destructive" />, title: "Daily Deals", desc: "Up to 50% off" }
+              { icon: <ShieldCheck className="text-secondary" />, title: "Secure Checkout", desc: "100% protected" },
+              { icon: <TrendingUp className="text-secondary" />, title: "Trending", desc: "Most popular now" },
+              { icon: <Percent className="text-secondary" />, title: "Daily Deals", desc: "Up to 50% off" }
             ].map((f, i) => (
               <div key={i} className="bg-background p-4 rounded-lg flex items-center gap-4 border hover:border-primary/20 transition-colors">
                 <div className="p-2 bg-muted rounded-full">{f.icon}</div>
