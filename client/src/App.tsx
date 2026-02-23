@@ -8,6 +8,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import ProductDetail from "@/pages/ProductDetail";
 import Checkout from "@/pages/Checkout";
+import AuthPage from "@/pages/AuthPage";
 
 function Router() {
   return (
@@ -15,6 +16,9 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/product/:id" component={ProductDetail} />
       <Route path="/checkout" component={Checkout} />
+      <Route path="/login" component={AuthPage} />
+      <Route path="/signup" component={AuthPage} />
+      <Route path="/forgot-password" component={AuthPage} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
