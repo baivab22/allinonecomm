@@ -1,38 +1,45 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { User, type IUser } from "./models/User";
+import bcrypt from "bcryptjs";
 
-// modify the interface with any CRUD methods
-// you might need
-
-export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+export async function findUserById(id: string): Promise<IUser | null> {
+  return User.findById(id);
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
-  }
-
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
-  }
+export async function findUserByEmail(email: string): Promise<IUser | null> {
+  return User.findOne({ email });
 }
 
-export const storage = new MemStorage();
+export async function findUserByEmailWithPassword(
+  email: string,
+): Promise<IUser | null> {
+  return User.findOne({ email }).select("+password");
+}
+
+export async function findUserByProvider(
+  provider: string,
+  providerId: string,
+): Promise<IUser | null> {
+  return User.findOne({ provider, providerId });
+}
+
+export async function createLocalUser(data: {
+  name: string;
+  email: string;
+  password: string;
+  phone?: string;
+}): Promise<IUser> {
+  const salt = await bcrypt.genSalt(12);
+  const hashedPassword = await bcrypt.hash(data.password, salt);
+  return User.create({
+    ...data,
+    password: hashedPassword,
+    provider: "local",
+  });
+}
+
+export async function comparePassword(
+  plaintext: string,
+  hash: string,
+): Promise<boolean> {
+  return bcrypt.compare(plaintext, hash);
+}

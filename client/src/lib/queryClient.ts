@@ -7,6 +7,28 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+async function refreshAndRetry(
+  method: string,
+  url: string,
+  data?: unknown,
+): Promise<Response> {
+  const refreshRes = await fetch("/api/auth/refresh", {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!refreshRes.ok) {
+    throw new Error("401: Session expired");
+  }
+
+  return fetch(url, {
+    method,
+    headers: data ? { "Content-Type": "application/json" } : {},
+    body: data ? JSON.stringify(data) : undefined,
+    credentials: "include",
+  });
+}
+
 export async function apiRequest(
   method: string,
   url: string,
@@ -18,6 +40,17 @@ export async function apiRequest(
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });
+
+  if (res.status === 401 && !url.includes("/api/auth/refresh")) {
+    try {
+      const retryRes = await refreshAndRetry(method, url, data);
+      await throwIfResNotOk(retryRes);
+      return retryRes;
+    } catch {
+      await throwIfResNotOk(res);
+      return res;
+    }
+  }
 
   await throwIfResNotOk(res);
   return res;

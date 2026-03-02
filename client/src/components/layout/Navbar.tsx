@@ -1,9 +1,20 @@
 import { Link } from "wouter";
-import { Search, ShoppingCart, User, Menu, MapPin } from "lucide-react";
+import { Search, ShoppingCart, Menu, MapPin, LogOut, User, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Navbar() {
+  const { user, isAuthenticated, logout } = useAuth();
+
   return (
     <header className="sticky top-0 z-50 w-full flex flex-col">
       {/* Top Bar - Amazon style but minimal */}
@@ -15,7 +26,7 @@ export function Navbar() {
                 LUMINA<span className="text-secondary">.</span>
               </a>
             </Link>
-            
+
             <div className="hidden lg:flex items-center gap-2 text-xs opacity-80 cursor-pointer hover:ring-1 hover:ring-white/20 p-1 rounded transition-all">
               <MapPin className="h-4 w-4" />
               <div className="flex flex-col">
@@ -30,8 +41,8 @@ export function Navbar() {
               <div className="bg-muted text-muted-foreground text-xs px-3 flex items-center rounded-l-md border-r cursor-pointer hover:bg-muted/80">
                 All
               </div>
-              <Input 
-                className="rounded-none bg-background text-foreground focus-visible:ring-0 border-none h-10" 
+              <Input
+                className="rounded-none bg-background text-foreground focus-visible:ring-0 border-none h-10"
                 placeholder="Search Lumina essentials..."
               />
               <Button size="icon" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-l-none rounded-r-md h-10 w-12">
@@ -41,11 +52,62 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-1">
-            <Button variant="ghost" className="hidden lg:flex flex-col items-start h-auto py-1 px-3 hover:bg-white/10">
-              <span className="text-[10px] opacity-80">Hello, Sign in</span>
-              <span className="text-sm font-bold">Account & Lists</span>
-            </Button>
-            
+            {isAuthenticated && user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="hidden lg:flex items-center gap-2 h-auto py-1 px-3 hover:bg-white/10">
+                    <Avatar className="h-7 w-7">
+                      <AvatarImage src={user.avatar} />
+                      <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
+                        {user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col items-start">
+                      <span className="text-[10px] opacity-80">Hello, {user.name.split(" ")[0]}</span>
+                      <span className="text-sm font-bold">Account & Lists</span>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <a className="flex items-center gap-2 w-full">
+                        <User className="h-4 w-4" />
+                        My Profile
+                      </a>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <a className="flex items-center gap-2 w-full">
+                        <Package className="h-4 w-4" />
+                        Orders
+                      </a>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => logout()}
+                    className="text-destructive focus:text-destructive cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login">
+                <Button variant="ghost" className="hidden lg:flex flex-col items-start h-auto py-1 px-3 hover:bg-white/10">
+                  <span className="text-[10px] opacity-80">Hello, Sign in</span>
+                  <span className="text-sm font-bold">Account & Lists</span>
+                </Button>
+              </Link>
+            )}
+
             <Link href="/checkout">
               <Button variant="ghost" className="flex items-center gap-2 h-auto py-2 px-3 hover:bg-white/10 relative">
                 <div className="relative">
@@ -79,8 +141,8 @@ export function Navbar() {
       {/* Mobile Search Bar */}
       <div className="bg-primary p-3 md:hidden">
         <div className="flex bg-background rounded-md overflow-hidden">
-          <Input 
-            className="border-none focus-visible:ring-0 h-10 text-foreground" 
+          <Input
+            className="border-none focus-visible:ring-0 h-10 text-foreground"
             placeholder="Search Lumina..."
           />
           <Button size="icon" className="bg-secondary text-secondary-foreground rounded-none h-10 w-12">

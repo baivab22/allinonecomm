@@ -2,6 +2,12 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { connectDB } from "./db";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import cors from "cors";
+import mongoSanitize from "express-mongo-sanitize";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 const httpServer = createServer(app);
@@ -11,6 +17,29 @@ declare module "http" {
     rawBody: unknown;
   }
 }
+
+// Security middleware
+app.use(cookieParser());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5000",
+    credentials: true,
+  }),
+);
+app.use(mongoSanitize());
+
+// Rate limiting for auth routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: { message: "Too many requests, please try again later" },
+});
+app.use("/api/auth", authLimiter);
 
 app.use(
   express.json({
@@ -60,6 +89,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  await connectDB();
   await registerRoutes(httpServer, app);
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
